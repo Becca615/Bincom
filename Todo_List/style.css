@@ -1,0 +1,67 @@
+html {
+    background-image: linear-gradient(
+        to top right,
+        #D16CAd,
+        #56f756
+    );
+    height: 100%;
+    font-family: 'verdana';
+}
+
+.container {
+    width: 450px;
+    margin: 0 auto;
+    background: beige;
+    margin-top: 80px;
+    padding: 30px 20px;
+}
+
+#header {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 50px;
+    font-size: 25px;
+}
+
+.list-item {
+    position: relative;
+    margin: 20px 0;
+    padding: 15px 20px;
+    border-radius: 20px;
+    background-color: #f8f8f8;   
+}
+
+.list-item:hover {
+    background-color: #f1f1f1;
+}
+
+.list-item div {
+    transition: .3s;
+    border: 1px solid gray;
+}
+
+input {
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+}
+
+.list-item div, input {
+    position: absolute;
+    margin-top: -2px;
+    right: 20px;
+    width: 23px;
+    height: 23px;
+}
+
+input:checked ~ div {
+    background: #D16CAd;
+    color: white;
+    border: 1px solid #D16CAd;
+}
+
+input:checked ~ div:before {
+    content: '\2713';
+    position: absolute;
+    left: 5px;
+}
