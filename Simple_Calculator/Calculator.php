@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <body>
     <head>
-        <meta charset="UTF-8">
-        <meta http-equip="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-</head>
-
-<form action = "calc_process.php" method = "POST">
-    <label>Select an operation: </label>
-    <select name = "dropdown">
+        <title>Calculator</title>
+    </head>
+    <form action = "index.php" method = "POST">
+     <label>Select an operation: </label>
+     <select name = "dropdown">
         <option></option>
         <option value = "Addition">Addition</option>
         <option value = "Subtraction">Subtraction</option>

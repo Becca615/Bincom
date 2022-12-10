@@ -2,7 +2,7 @@
 
 function compute()
 {
-    $num1 = $_POST['FirstNum'];
+    $num1 = $_POST ['FirstNum'];
     $num2 = $_POST['SecondNum'];
 
     switch($_POST['dropdown'])
@@ -23,11 +23,12 @@ function compute()
             $quo = $num1 / $num2;
             return $quo;
             break;
-        default
+
+        default:
             echo "Invalid Operation";
     }
 }
-            echo "The result is: " . compute();
+        echo "The result is: " . compute(); 
 ?>
-<br>
+ <br>
 <a href = "Calculator.php">Back</a>
