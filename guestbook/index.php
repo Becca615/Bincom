@@ -50,13 +50,34 @@ function Validate()
     </ul>
     <hr/>
     </div>
+	<div class="guest">
+	<?php
+	include("config.php");
+
+	$result = mysqli_query($db, "SELECT * FROM guestbook");
+	while($row = mysqli_fetch_array($result))
+	{
+	$id=$row['id'];
+	$name = $row['name'];
+	$comment = $row['comment'];
+		?>
+	<h3><?php echo $name; ?></h3>
+    <p><?php echo $comment; ?></p><br>
+	<button><a href="<?php echo HOMEPAGE?>delete.php?id=<?php echo $id;?>">DELETE</a></button>
+	<button><a href="<?php echo HOMEPAGE?>edit.php?id=<?php echo $id;?>">EDIT</a></button>
+
+
+	<?php } 
+		mysqli_close($db);
+?>
+	</div>
     <div id="content">
     <h2>Sign Guest Book </h2>
-   		<form name="guest" method="post" action="guestbook.php">
+   		<form name="guest" method="POST" action="addcomment.php">
 			<span>Name:</span>   <input type="text" name="name"/><br />
             <span>Email:</span> <input type="text" name="email"/><br />
             <p>Comment:</p> <textarea name="comment" rows="10" cols="50"> </textarea> <br />
-            <button type="submit" value="Post" name="submit">Submit</button>
+            <button type="submit" name="submit">Submit</button>
         </form>
     </div>
 </div>
