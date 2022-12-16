@@ -5,13 +5,14 @@ define('dbHost', 'localhost');
 define('dbUsername','root');
 define('dbPassword','');
 define('dbDatabase','guestbook');
+define('HOMEPAGE', 'http://localhost/dami/bincom/guestbook/');
 
 
 $db=mysqli_connect(dbHost, dbUsername, dbPassword, dbDatabase);
 
-/*if($conn == TRUE){
-    echo "lies";
-}else{
-    echo "failed";
-}*/
+//if($db == TRUE){
+//    echo "success";
+//}else{
+//    echo "failed";
+//}
 ?>
