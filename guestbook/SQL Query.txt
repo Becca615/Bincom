@@ -1,0 +1,7 @@
+CREATE TABLE guestbook(
+id int(11) NOT NULL auto_increment,
+name varchar(50) NOT NULL default ' ',
+email varchar(30) NOT NULL default ' ',
+comment text NOT NULL,
+Primary key(id)
+);
