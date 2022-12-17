@@ -65,6 +65,7 @@ function Validate()
     <p><?php echo $comment; ?></p><br>
 	<button><a href="<?php echo HOMEPAGE?>delete.php?id=<?php echo $id;?>">DELETE</a></button>
 	<button><a href="<?php echo HOMEPAGE?>edit.php?id=<?php echo $id;?>">EDIT</a></button>
+	<button><a href="<?php echo HOMEPAGE?>update.php?id=<?php echo $id;?>">UPDATE</a></button>
 
 
 	<?php } 
@@ -74,9 +75,9 @@ function Validate()
     <div id="content">
     <h2>Sign Guest Book </h2>
    		<form name="guest" method="POST" action="addcomment.php">
-			<span>Name:</span>   <input type="text" name="name"/><br />
-            <span>Email:</span> <input type="text" name="email"/><br />
-            <p>Comment:</p> <textarea name="comment" rows="10" cols="50"> </textarea> <br />
+			<span>Name:</span>   <input type="text" name="name" placeholder="enter your name"/><br />
+            <span>Email:</span> <input type="text" name="email" placeholder="enter your email"/><br />
+            <p>Comment:</p> <textarea name="comment" placeholder="comment" rows="10" cols="50"> </textarea> <br />
             <button type="submit" name="submit">Submit</button>
         </form>
     </div>
