@@ -2,7 +2,7 @@
 
 session_start();
 
-if(lisset($_SESSION["use_id"])){
+if(!isset($_SESSION["use_id"])){
     header("Locatiom: index.php");
 }
 
