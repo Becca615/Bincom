@@ -4,7 +4,7 @@
 define('dbHost', 'localhost');
 define('dbUsername','root');
 define('dbPassword','');
-define('dbDatabase','guestbook');
+define('dbDatabase', 'guestbook');
 define('HOMEPAGE', 'http://localhost/dami/bincom/guestbook/');
 
 
