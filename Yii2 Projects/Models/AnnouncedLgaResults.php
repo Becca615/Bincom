@@ -31,7 +31,7 @@ class AnnouncedLgaResults extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['polling_unit_name', 'lga_name', 'party_abbreviation', 'party_score', 'entered_by_user', 'date_entered', 'user_ip_address'], 'required'],
+            [['polling_unit_name', 'lga_name', 'party_abbreviation', 'party_score'], 'required'],
             [['party_score'], 'integer'],
             [['date_entered'], 'safe'],
             [['polling_unit_name', 'lga_name', 'entered_by_user', 'user_ip_address'], 'string', 'max' => 50],
@@ -49,9 +49,9 @@ class AnnouncedLgaResults extends \yii\db\ActiveRecord
             'lga_name' => 'Lga Name',
             'party_abbreviation' => 'Party Abbreviation',
             'party_score' => 'Party Score',
-            'entered_by_user' => 'Entered By User',
-            'date_entered' => 'Date Entered',
-            'user_ip_address' => 'User Ip Address',
+            // 'entered_by_user' => 'Entered By User',
+            // 'date_entered' => 'Date Entered',
+            // 'user_ip_address' => 'User Ip Address',
         ];
     }
 }

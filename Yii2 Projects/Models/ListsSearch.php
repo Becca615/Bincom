@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\AnnouncedLgaResults;
+use app\models\Lists;
 
 /**
- * AnnounceLgaResultsSearch represents the model behind the search form of `app\models\announcedLgaResults`.
+ * ListsSearch represents the model behind the search form of `app\models\Lists`.
  */
-class AnnounceLgaResultsSearch extends announcedLgaResults
+class ListsSearch extends Lists
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
     public function rules()
     {
         return [
-            [['result_id', 'party_score'], 'integer'],
-            [['lga_name', 'party_abbreviation', 'entered_by_user', 'date_entered', 'user_ip_address'], 'safe'],
+            [['id'], 'integer'],
+            [['name', 'information', 'category', 'remark'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
      */
     public function search($params)
     {
-        $query = announcedLgaResults::find();
+        $query = Lists::find();
 
         // add conditions that should always apply here
 
@@ -58,15 +58,13 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'result_id' => $this->result_id,
-            'party_score' => $this->party_score,
-            'date_entered' => $this->date_entered,
+            'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'lga_name', $this->lga_name])
-            ->andFilterWhere(['like', 'party_abbreviation', $this->party_abbreviation])
-            ->andFilterWhere(['like', 'entered_by_user', $this->entered_by_user])
-            ->andFilterWhere(['like', 'user_ip_address', $this->user_ip_address]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'information', $this->information])
+            ->andFilterWhere(['like', 'category', $this->category])
+            ->andFilterWhere(['like', 'remark', $this->remark]);
 
         return $dataProvider;
     }

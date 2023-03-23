@@ -28,10 +28,24 @@ class AnnouncedPuResults extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function getPollingUnits()
+    {
+        return $this->hasMany(PollingUnit::class, ['polling_unit_id' => 'uniqueid']);
+    }
+
+    public function getLga()
+    {
+        return $this->hasOne(Lga::class, ['uniqueid' => 'lga_id']);
+    }
+
+    public function getAnnouncedPuResults()
+    {
+        return $this->hasMany(AnnouncedPuResults::class, ['polling_unit_uniqueid' => 'uniqueid']);
+    }
     public function rules()
     {
         return [
-            [['polling_unit_uniqueid', 'party_abbreviation', 'party_score', 'entered_by_user', 'date_entered', 'user_ip_address'], 'required'],
+            [['polling_unit_uniqueid', 'lga_name', 'party_abbreviation', 'party_score'], 'required'],
             [['party_score'], 'integer'],
             [['date_entered'], 'safe'],
             [['polling_unit_uniqueid', 'entered_by_user', 'user_ip_address'], 'string', 'max' => 50],
@@ -49,9 +63,9 @@ class AnnouncedPuResults extends \yii\db\ActiveRecord
             'polling_unit_uniqueid' => 'Polling Unit Uniqueid',
             'party_abbreviation' => 'Party Abbreviation',
             'party_score' => 'Party Score',
-            'entered_by_user' => 'Entered By User',
-            'date_entered' => 'Date Entered',
-            'user_ip_address' => 'User Ip Address',
+            // 'entered_by_user' => 'Entered By User',
+            // 'date_entered' => 'Date Entered',
+            // 'user_ip_address' => 'User Ip Address',
         ];
     }
 }

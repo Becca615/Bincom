@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\AnnouncedLgaResults;
+use app\models\announcedPuResults;
 
 /**
- * AnnounceLgaResultsSearch represents the model behind the search form of `app\models\announcedLgaResults`.
+ * AnnouncePuResultsSearch represents the model behind the search form of `app\models\announcedPuResults`.
  */
-class AnnounceLgaResultsSearch extends announcedLgaResults
+class AnnouncePuResultsSearch extends announcedPuResults
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
     {
         return [
             [['result_id', 'party_score'], 'integer'],
-            [['lga_name', 'party_abbreviation', 'entered_by_user', 'date_entered', 'user_ip_address'], 'safe'],
+            [['polling_unit_uniqueid', 'party_abbreviation', 'entered_by_user', 'date_entered', 'user_ip_address'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
      */
     public function search($params)
     {
-        $query = announcedLgaResults::find();
+        $query = announcedPuResults::find();
 
         // add conditions that should always apply here
 
@@ -63,7 +63,7 @@ class AnnounceLgaResultsSearch extends announcedLgaResults
             'date_entered' => $this->date_entered,
         ]);
 
-        $query->andFilterWhere(['like', 'lga_name', $this->lga_name])
+        $query->andFilterWhere(['like', 'polling_unit_uniqueid', $this->polling_unit_uniqueid])
             ->andFilterWhere(['like', 'party_abbreviation', $this->party_abbreviation])
             ->andFilterWhere(['like', 'entered_by_user', $this->entered_by_user])
             ->andFilterWhere(['like', 'user_ip_address', $this->user_ip_address]);

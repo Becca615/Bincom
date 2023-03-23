@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+
 /**
  * This is the model class for table "polling_unit".
  *
@@ -27,8 +28,16 @@ class PollingUnit extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return  'polling_unit';
+        return 'polling_unit';
     }
+
+
+    public function getLga()
+    {
+        return $this->hasMany(Lga::class, ['uniqueid' => 'lga_id']);
+    }
+
+ 
 
     /**
      * {@inheritdoc}
@@ -36,10 +45,11 @@ class PollingUnit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['polling_unit_id', 'ward_id', 'lga_id'], 'required'],
+            [['uniqueid', 'polling_unit_uniqueid', 'polling_unit_id', 'ward_id', 'lga_id'], 'required'],
             [['polling_unit_id', 'ward_id', 'lga_id', 'uniquewardid'], 'integer'],
             [['polling_unit_description'], 'string'],
             [['date_entered'], 'safe'],
+            [['lga'], 'safe'],
             [['polling_unit_number', 'polling_unit_name', 'entered_by_user', 'user_ip_address'], 'string', 'max' => 50],
             [['lat', 'long'], 'string', 'max' => 255],
         ];
@@ -54,6 +64,7 @@ class PollingUnit extends \yii\db\ActiveRecord
             'uniqueid' => 'Uniqueid',
             'polling_unit_id' => 'Polling Unit ID',
             'ward_id' => 'Ward ID',
+            'lga' => 'LGA',
             'lga_id' => 'Lga ID',
             'uniquewardid' => 'Uniquewardid',
             'polling_unit_number' => 'Polling Unit Number',
