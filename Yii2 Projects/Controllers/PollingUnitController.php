@@ -2,20 +2,17 @@
 
 namespace app\controllers;
 
-use app\models\PollingUnit;
-use app\models\PollingUnitSearch;
+use Yii;
+use yii\db\Query;
+use app\models\AnnouncedPuResults;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
-/**
- * PollingUnitController implements the CRUD actions for PollingUnit model.
- */
+
 class PollingUnitController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
+
     public function behaviors()
     {
         return array_merge(
@@ -31,104 +28,78 @@ class PollingUnitController extends Controller
         );
     }
 
-    /**
-     * Lists all PollingUnit models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new PollingUnitSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+public function actionIndex()
+{ 
+        // Retrieve list of LGAs
+                        $lgas = (new Query)
+                            ->select(['lga_name AS lga'])
+                            ->from('lga')
+                            ->orderBy('lga_name')
+                            ->all();
 
-    /**
-     * Displays a single PollingUnit model.
-     * @param int $uniqueid Uniqueid
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($uniqueid)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($uniqueid),
-        ]);
-    }
+                            // var_dump($lgas);
 
-    /**
-     * Creates a new PollingUnit model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new PollingUnit();
+     // Retrieve selected LGA and polling unit (if any)
+            $selectedLga = Yii::$app->request->post('lga');
+            $selectedPu = Yii::$app->request->post('polling_unit');
+            //   var_dump($selectedLga);
+            //     var_dump($selectedPu);
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'uniqueid' => $model->uniqueid]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
+             // Retrieve list of polling units and their associated LGAs
+             $pus = (new Query)
+             ->select(['polling_unit_name AS name'])
+             ->from('polling_unit')
+             ->where(['polling_unit_id' => $selectedLga])
+             ->orderBy('polling_unit_name')
+             ->all();
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+            //  var_dump($pus);
 
-    /**
-     * Updates an existing PollingUnit model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $uniqueid Uniqueid
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($uniqueid)
-    {
-        $model = $this->findModel($uniqueid);
+           
+            $puResults = AnnouncedPuResults::find()
+                                ->where(['polling_unit_uniqueid' => $selectedLga])
+                                ->orderBy('party_score DESC')
+                                ->all();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'uniqueid' => $model->uniqueid]);
-        }
+                                // var_dump($puResults);
+    
+             // Build query to retrieve party scores
+        $query = new Query();
+        // $query->select([
+        //     'lg.lga_name AS lga',
+        //     'pu.polling_unit_name AS name',
+        //     'SUM(apu.party_score) AS Total',
+        // ]);
+        $query->from('announced_pu_results apu')
+            ->innerJoin('polling_unit pu', 'pu.uniqueid = apu.polling_unit_uniqueid')
+            ->innerJoin('lga lg', 'pu.lga_id = lg.uniqueid')
+            ->where(['not', ['apu.party_score' => null]]);
+        $query->groupBy('pu.polling_unit_id')
+            ->limit(100);
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
 
-    /**
-     * Deletes an existing PollingUnit model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $uniqueid Uniqueid
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($uniqueid)
-    {
-        $this->findModel($uniqueid)->delete();
+                    $dataProvider = new ActiveDataProvider([
+                            'query' => $query,
+                            'pagination' => [
+                                'pageSize' => 50,
+                            ],
+                        ]);
 
-        return $this->redirect(['index']);
-    }
+                         // Render index file and pass relevant data to view
+                        return $this->render('index', [
+                            'lgas' => $lgas,
+                            'pus' => $pus,
+                            'selectedLga' => $selectedLga,
+                            'selectedPu' => $selectedPu,
+                            'dataProvider' => $dataProvider,
+                            'puResults' => $puResults ?? [],
+                            // 'party_score' => $party_score ?? [],
+                         
+                        ]);
+                        
+                    }
+                }
+         
 
-    /**
-     * Finds the PollingUnit model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $uniqueid Uniqueid
-     * @return PollingUnit the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($uniqueid)
-    {
-        if (($model = PollingUnit::findOne(['uniqueid' => $uniqueid])) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
-}
+          
