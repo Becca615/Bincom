@@ -1,55 +1,100 @@
 <?php
 
-use app\models\PollingUnit;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+
+
 
 /** @var yii\web\View $this */
-/** @var app\models\PollingUnitSearch $searchModel */
+/** @var yii\grid\GridView $this */
+/** @var app\models\Lga  */
+/** @var app\models\PollingUnit  */
+/** @var app\models\\AnnouncedPuResults  */
+/** @var app\models\AnnouncedLgaResults */
+// /** @var yii\helpers\Html$this */
+/** @var yii\widgets\ActiveForm $form */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Polling Units';
+$this->title = 'Polling Units Result';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="polling-unit-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="result-index">
+
+<h1><?= Html::encode($this->title) ?></h1>
 
 
-    <p>
-        <?= Html::a('Create Polling Unit', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<?= Html::beginForm(['polling-unit/index'], 'post') ?>
+    <?= Html::label('Select a Local Government:', 'lga-select') ?>
+    <?= Html::hiddenInput(Yii::$app->getRequest()->csrfParam, Yii::$app->getRequest()->getCsrfToken()) ?>
+    <?= Html::dropDownList('lga', $selectedLga, array_merge(['' => 'All LGAs'], array_column($lgas, 'lga')), ['id' => 'lga-select', 'class' => 'form-control']) ?>
+    <?= Html::label('Select a Polling Unit:', 'pu-select') ?>
+    <!-- </?= Html::dropDownList('pu', $selectedPu, $pus, ['id' => 'pu-select', 'class' => 'form-control']) ?>   -->
+    <?= Html::dropDownList('polling_unit', $selectedPu, array_merge(['' => 'All PUs'], array_column($pus, 'name')), ['id' => 'pu-select', 'class' => 'form-control']) ?>
+    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+    <?= Html::endForm() ?>
 
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'uniqueid',
-            'polling_unit_id',
-            'ward_id',
-            'lga_id',
-            'uniquewardid',
-            'polling_unit_number',
-            'polling_unit_name',
-            //'polling_unit_description:ntext',
-            //'lat',
-            //'long',
-            //'entered_by_user',
-            //'date_entered',
-            //'user_ip_address',
+    <br>
+     
+       <?php if ($puResults): ?>
+        <!-- <h3>Party Scores for Polling Unit: </?= Html::encode($selectedLga) ?></h3> -->
+         <table class="table table-bordered"> 
+            <thead>
+                <tr>
+                    <th>Party Name</th>
+                    <th>Party Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($puResults as $result): ?>
+                    <tr>
+                        <td><?= Html::encode($result->party_abbreviation) ?></td>
+                        <td><?= Html::encode($result->party_score) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>  
+    <br>
+       
+     <!-- </?= GridView::widget([
+        //  'dataProvider' => $dataProvider,
+        'dataProvider' => new ArrayDataProvider([
+            'allModels' => ([
+                $puResults,
+            ]),
+             'pagination' => [
+                'pageSize' => 100, // set the number of rows per page
+               ],
+        ]),
+                
+         'columns' => [
+          
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, PollingUnit $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'uniqueid' => $model->uniqueid]);
-                 }
+                // 'attribute' => 'lga_name',
+                'attribute' => 'lga',
+                 'label' => 'Local Government Area',
+                 'value' => function ($model) use ($selectedLga) {
+                    return $selectedLga;
+                 },
             ],
-        ],
-    ]); ?>
+            [
+                'attribute' => 'polling_unit_name',
+                 'label' => 'Polling Unit',
+                 'value' => function ($model) use ($selectedPu) {
+                    return $selectedPu;
+                },
+            ],
+            // 'party_abbreviation',
+            // 'party_score',  
+        ], 
+        
+     ]);  ?> -->
 
-</div>
+<!-- </?php var_dump($puResults); ?> -->
+
+   
+
+</div> 
+
+

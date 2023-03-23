@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\PollingUnit $model */
+/** @var app\models\Lists $model */
 
-$this->title = 'Create Polling Unit';
-$this->params['breadcrumbs'][] = ['label' => 'Polling Units', 'url' => ['index']];
+$this->title = 'Add Friends';
+$this->params['breadcrumbs'][] = ['label' => 'Lists', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="polling-unit-create">
+<div class="lists-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
